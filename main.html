@@ -1,20 +1,66 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Async Delay Message</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+    #output {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 1.2em;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
 
-<html>
-  <head>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
+  <form id="messageForm">
+    <label for="text">Enter message:</label><br />
+    <input type="text" id="text" name="text" /><br /><br />
 
-  <body>
-    <!-- the entire body must be written by student -->
-    <form onsubmit="return false">
-      <input type="text" id="text" placeholder="Text" />
-      <input type="number" id="delay" placeholder="Delay" />
-      <button type="button" id="btn">Submit</button>
-    </form>
+    <label for="delay">Enter delay (ms):</label><br />
+    <input type="number" id="delay" name="delay" /><br /><br />
 
-    <div id="output"></div>
+    <button id="btn" type="submit">Submit</button>
+  </form>
 
-    <script type="text/javascript" src="./script.js"></script>
-  </body>
+  <div id="output"></div>
+
+  <script>
+    // Promise that resolves after ms milliseconds
+    function delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    document.getElementById('messageForm').addEventListener('submit', async (event) => {
+      event.preventDefault(); // Prevent page reload
+
+      const textInput = document.getElementById('text').value.trim();
+      const delayInput = parseInt(document.getElementById('delay').value, 10);
+      const outputDiv = document.getElementById('output');
+
+      outputDiv.textContent = ''; // Clear previous output
+
+      if (!textInput) {
+        outputDiv.textContent = 'Please enter a message.';
+        return;
+      }
+
+      if (isNaN(delayInput) || delayInput < 0) {
+        outputDiv.textContent = 'Please enter a valid delay in milliseconds.';
+        return;
+      }
+
+      await delay(delayInput);
+
+      outputDiv.textContent = textInput;
+    });
+  </script>
+
+</body>
 </html>
